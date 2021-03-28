@@ -1,10 +1,12 @@
 package web.dao;
 
 import org.springframework.stereotype.Component;
+import org.springframework.web.bind.annotation.RequestParam;
 import web.model.Car;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Component
 public class CarDaoImp implements CarDao{
@@ -18,11 +20,7 @@ public class CarDaoImp implements CarDao{
         cars.add(new Car("Dmitry Borovkski","Mersedes", 223432));
     }
     @Override
-    public List<Car> getCars(int car) {
-        if (car > 5) {
-            return cars.subList(0, cars.size());
-        } else {
-            return cars.subList(0, car);
-        }
+    public List<Car> getCars(@RequestParam(value = "count", required = false) int count) {
+        return cars.stream().limit(count).collect(Collectors.toList());
     }
 }
