@@ -20,7 +20,7 @@ public class CarDaoImp implements CarDao{
         cars.add(new Car("Dmitry Borovkski","Mersedes", 223432));
     }
     @Override
-    public List<Car> getCars(@RequestParam(value = "count", required = false) int count) {
+    public List<Car> getCars(int count) {
         return cars.stream().limit(count).collect(Collectors.toList());
     }
 }
