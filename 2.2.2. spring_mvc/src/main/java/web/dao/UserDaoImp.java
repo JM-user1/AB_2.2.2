@@ -1,62 +1,48 @@
 package web.dao;
 
-import org.springframework.stereotype.Repository;
+import org.springframework.stereotype.Component;
 import web.model.User;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.concurrent.atomic.AtomicInteger;
 
-@Repository
+@Component
 public class UserDaoImp implements UserDao{
-    private static final AtomicInteger AUTO_ID = new AtomicInteger(0);
-    private static final Map<Integer, User> users = new HashMap<>();
+    private static int USER_COUNT;
+    private final List<User> users;
 
-    static {
-        User user = new User();
-        user.setId(AUTO_ID.getAndIncrement());
-        user.setName("Ian");
-        user.setSurName("Gallagher");
-        users.put((int) user.getId(), user);
-        //------------------------------------
-        User user1 = new User();
-        user1.setId(AUTO_ID.getAndIncrement());
-        user1.setName("Mickey");
-        user1.setSurName("Milkovich");
-        users.put((int) user1.getId(), user1);
-        //--------------------------------------
-        User user2 = new User();
-        user2.setId(AUTO_ID.getAndIncrement());
-        user2.setName("Mandy");
-        user2.setSurName("Milkovich");
-        users.put((int) user2.getId(), user2);
+    {
+        users = new ArrayList<>();
+
+        users.add(new User(++USER_COUNT,"Jessy", "PinkMan"));
+        users.add(new User(++USER_COUNT,"Frank", "Gallagher"));
+        users.add(new User(++USER_COUNT,"Fiona", "Gallagher"));
+        users.add(new User(++USER_COUNT,"Mickey", "Milkovich"));
     }
 
     @Override
     public List<User> getAllUsers() {
-        return new ArrayList<>(users.values());
+        return users;
+    }
+
+    @Override
+    public User getById(int id) {//show
+        return users.stream().filter(user -> user.getId() == id).findAny().orElse(null);
     }
 
     @Override
     public void add(User user) {
-        user.setId(AUTO_ID.getAndIncrement());
-        users.put((int) user.getId(), user);
+        user.setId(++USER_COUNT);
+        users.add(user);
     }
 
     @Override
     public void delete(User user) {
-        users.remove(user.getId());
     }
 
     @Override
-    public void edit(User user) {
-        users.put((int) user.getId(), user);
+    public void edit(int id) {
+        //return people.stream().filter(person -> person.getId() == id).findAny().orElse(null);
     }
 
-    @Override
-    public User getById(Integer id) {
-        return users.get(id);
-    }
 }

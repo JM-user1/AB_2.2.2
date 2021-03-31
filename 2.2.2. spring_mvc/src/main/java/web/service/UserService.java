@@ -8,6 +8,6 @@ public interface UserService {
     List<User> getAllUsers();
     void add(User user);
     void delete(User user);
-    void edit(User user);
-    User getById(Integer id);
+    void edit(int id);
+    User getById(int id);
 }

@@ -2,6 +2,8 @@ package web.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 import web.model.User;
@@ -12,35 +14,36 @@ import java.util.List;
 
 @Controller
 public class UserController {
-    private UserService userService;
+
+    private final UserService userService;
 
     @Autowired
-    public void setUserService(UserService userService) {
+    public UserController(UserService userService) {
         this.userService = userService;
     }
 
-    @RequestMapping(value = "/all-users", method = RequestMethod.GET)
-    public ModelAndView AllUsers() {
-        List<User> users = userService.getAllUsers();
-        ModelAndView modelAndView = new ModelAndView();
-        modelAndView.setViewName("all-users");
-        modelAndView.addObject("usersList", users);
-        return modelAndView;
+    @GetMapping(value = "/all-users")
+    public String AllUsers(Model model) {
+        model.addAttribute("users",userService.getAllUsers());
+        return "all-users";
     }
 
-    @RequestMapping(value = "/edit/{id}", method = RequestMethod.GET)
-    public ModelAndView editPage(@PathVariable("id") Integer id) {
-        User user = userService.getById(id);
-        ModelAndView modelAndView = new ModelAndView();
-        modelAndView.setViewName("edit-user");
-        modelAndView.addObject("user", user);
-        return modelAndView;
+    @GetMapping("/{id}")
+    public String show(@PathVariable("id") int id, Model model) {
+        model.addAttribute("user", userService.getById(id));
+        return "edit-user";
     }
 
-    @RequestMapping(value = "/edit", method = RequestMethod.GET)
-    public ModelAndView editUser(@ModelAttribute("user") User user) {
-        ModelAndView modelAndView = new ModelAndView();
-        userService.edit(user);
-        return modelAndView;
+    @GetMapping("/new")
+    public String newUser(ModelMap model){
+        model.addAttribute("user", new User());
+        return "new";
     }
+
+    @PostMapping()
+    public String create(@ModelAttribute("user") User user) {
+        userService.add(user);
+        return "redirect:/all-users";
+    }
+
 }

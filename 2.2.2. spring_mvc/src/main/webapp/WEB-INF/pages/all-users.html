@@ -1,38 +1,16 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>All Users</title>
 </head>
 <body>
-<h2>USERS</h2>
+    <h2>USERS</h2>
 
-<table>
+    <div th:each="user : ${users}">
+        <a th:href="@{/{id}(id=${user.getId()})}" th:text="${user.getName()} ">userName</a>
+        <a th:href="@{/{id}(id=${user.getId()})}" th:text="${user.getSurName()}">userSurName</a>
+    </div>
 
-    <tr>
-        <th>Id</th>
-        <th>Name</th>
-        <th>LastName</th>
-    </tr>
-    <tr th:each="user : ${usersList}">
-        <td th:text="${user.getId()}">Onions</td>
-        <td th:text="${user.getName()}">2.41</td>
-        <td th:text="${user.getSurName()}">2.41</td>
-        <td>
-            <div class="btn-group">
-                <a th:href="@{/edit/{id}(id=${user.getId()})}" class="btn btn-primary active">
-                    <i class="glyphicon glyphicon-floppy-disk" aria-hidden="true"></i> Edit
-                </a>
-            </div>
-            <!--<a href="/edit/${user.getId()}">edit</a>
-            <a href="/delete/${user.id}">delete</a>-->
-        </td>
-    </tr>
-
-</table>
-
-<h2>Add</h2>
-<a href="/add${add}">Add new user</a>
 </body>
 </html>
